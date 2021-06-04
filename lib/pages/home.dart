@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/routes/homeRouter.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -8,9 +9,9 @@ class Home extends StatelessWidget {
         title: Text('My app'),
       ),
       endDrawer: HomeDrawer(),
-      body: Container(
-        alignment: Alignment.center,
-        child: Text('body'),
+      body: Navigator(
+        onGenerateRoute: HomeRouter.generateRoute,
+        initialRoute: home1Route,
       ),
     );
   }
@@ -24,18 +25,21 @@ class HomeDrawer extends StatelessWidget {
         children: [
           ListTile(
             title: Text('Item 1'),
+            onTap: () {
+              Navigator.pushNamed(context, home1Route);
+            },
           ),
           ListTile(
             title: Text('Item 2'),
+            onTap: () {
+              Navigator.pushNamed(context, home2Route);
+            },
           ),
           ListTile(
             title: Text('Item 3'),
-          ),
-          ListTile(
-            title: Text('Item 4'),
-          ),
-          ListTile(
-            title: Text('Item 5'),
+            onTap: () {
+              Navigator.pushNamed(context, home3Route);
+            },
           ),
         ],
       ),

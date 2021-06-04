@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/router.dart';
 
-const home1 = '/home/home1';
-const home2 = '/home/home2';
-const home3 = '/home/home3';
+const home1Route = '/home/home1';
+const home2Route = '/home/home2';
+const home3Route = '/home/home3';
 
-class HomeRoute {
+class HomeRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print('${settings.name} - HomeRoute');
     switch (settings.name) {
-      case home1:
+      case home1Route:
         return MaterialPageRoute(
           builder: (_) => Container(
             child: Text('home 1'),
           ),
         );
-      case home2:
+      case home2Route:
         return MaterialPageRoute(
           builder: (_) => Container(
             child: Text('home 2'),
           ),
         );
-      case home3:
+      case home3Route:
         return MaterialPageRoute(
           builder: (_) => Container(
             child: Text('home 3'),
