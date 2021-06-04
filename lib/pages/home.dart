@@ -8,7 +8,10 @@ class Home extends StatelessWidget {
         title: Text('My app'),
       ),
       endDrawer: HomeDrawer(),
-      body: Mate,
+      body: Container(
+        alignment: Alignment.center,
+        child: Text('body'),
+      ),
     );
   }
 }
