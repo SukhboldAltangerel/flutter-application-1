@@ -30,9 +30,9 @@ class _LoginState extends State<Login> {
       if (res.statusCode == 200) {
         Navigator.pushNamed(context, homeRoute);
       } else {
-        var resBody = jsonDecode(res.body);
+        ResError resError = ResError.fromJson(jsonDecode(res.body));
         setState(() {
-          errorMessage = 'Алдаа гарлаа.';
+          errorMessage = resError.error.message;
         });
       }
     } else {
@@ -113,4 +113,26 @@ String? validatePassword(value) {
     return 'Нууц үгээ оруулна уу.';
   } else
     return null;
+}
+
+class Error {
+  int statusCode;
+  String message;
+
+  Error(this.statusCode, this.message);
+
+  factory Error.fromJson(dynamic json) {
+    return Error(json['statusCode'] as int, json['message'] as String);
+  }
+}
+
+class ResError {
+  bool success;
+  Error error;
+
+  ResError(this.success, this.error);
+
+  factory ResError.fromJson(dynamic json) {
+    return ResError(json['success'] as bool, Error.fromJson(json['error']));
+  }
 }
