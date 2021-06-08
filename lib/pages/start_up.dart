@@ -14,12 +14,19 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
   initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+        AnimationController(vsync: this, duration: Duration(seconds: 2))
+          ..addListener(() {
+            print(_fade.value);
+          });
+
     final CurvedAnimation curve =
         CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _fade = Tween<double>(begin: 0, end: 1).animate(curve);
-    _slide =
-        Tween<Offset>(begin: Offset.zero, end: Offset(0, -0.5)).animate(curve);
+
+    _fade = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
+
+    _slide = Tween<Offset>(begin: Offset.zero, end: Offset(0.0, -0.5))
+        .animate(curve);
+
     _controller.forward().whenCompleteOrCancel(() {
       Navigator.pushNamed(context, loginRoute);
     });

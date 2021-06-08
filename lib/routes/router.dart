@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/login.dart';
 import 'package:flutter_application_1/pages/start_up.dart';
+import 'package:flutter_application_1/utils/functions.dart';
 
 const startUpRoute = '/start-up';
 const loginRoute = '/login';
@@ -10,16 +11,28 @@ const homeRoute = '/home';
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print('${settings.name} - AppRoute');
-    switch (settings.name) {
+    String? pathName = getPathName(settings.name, 0);
+    late Widget page;
+
+    switch (pathName) {
       case startUpRoute:
-        return MaterialPageRoute(builder: (_) => StartUp());
+        page = StartUp();
+        break;
       case loginRoute:
-        return MaterialPageRoute(builder: (_) => Login());
+        page = Login();
+        break;
       case homeRoute:
-        return MaterialPageRoute(builder: (_) => Home());
+        page = Home();
+        break;
       default:
-        return MaterialPageRoute(builder: (_) => NotFound(url: settings.name));
+        page = NotFound(url: settings.name);
+        break;
     }
+
+    return MaterialPageRoute(
+      builder: (_) => page,
+      settings: settings,
+    );
   }
 }
 

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/homeRouter.dart';
+import 'package:flutter_application_1/routes/router.dart';
 
 class Home extends StatelessWidget {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,8 +13,10 @@ class Home extends StatelessWidget {
       ),
       endDrawer: HomeDrawer(),
       body: Navigator(
+        key: _navigatorKey,
         onGenerateRoute: HomeRouter.generateRoute,
         initialRoute: home1Route,
+        observers: [],
       ),
     );
   }
