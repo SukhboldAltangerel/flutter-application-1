@@ -14,10 +14,7 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
   initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
-          ..addListener(() {
-            print(_fade.value);
-          });
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
 
     final CurvedAnimation curve =
         CurvedAnimation(parent: _controller, curve: Curves.easeIn);
@@ -36,6 +33,13 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.red.shade900, Colors.blue.shade900],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+          ),
+        ),
         alignment: Alignment.center,
         child: FadeTransition(
           opacity: _fade,
@@ -43,6 +47,7 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
             position: _slide,
             child: Image(
               image: AssetImage('lib/assets/logo.png'),
+              width: 240,
             ),
           ),
         ),

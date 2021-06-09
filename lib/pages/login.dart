@@ -24,10 +24,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
   initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
-          ..addListener(() {
-            print(_length.value);
-          });
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
 
     final CurvedAnimation curve =
         CurvedAnimation(parent: _controller, curve: Curves.easeIn);
@@ -255,8 +252,11 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }
