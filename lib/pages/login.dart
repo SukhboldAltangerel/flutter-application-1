@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/homeRouter.dart';
@@ -10,26 +11,49 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
+class _LoginState extends State<Login> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
   String _errorMessage = '';
+
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
+
   bool _obscureText = true;
-  late AnimationController _controller;
-  late Animation _length;
+
+  double _emailWidth = 40.0;
+  double _passwordWidth = 40.0;
+
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 2000),
+    vsync: this,
+  );
+
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOutBack,
+  );
+
+  bool _showLogin = true;
+
+  TextEditingController _urlController = TextEditingController();
 
   initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        _emailWidth = 340.0;
+      });
+    });
 
-    final CurvedAnimation curve =
-        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-
-    _length = Tween(begin: 40.0, end: 340.0).animate(curve);
+    Future.delayed(Duration(milliseconds: 1000), () {
+      setState(() {
+        _passwordWidth = 340.0;
+      });
+    });
 
     _controller.forward();
   }
@@ -77,26 +101,25 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
     }
   }
 
+  void handleSwitchSettings() {
+    setState(() {
+      _showLogin = !_showLogin;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: colorsLogin.background,
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red.shade900, Colors.blue.shade900],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Expanded(
+              Positioned(
+                top: 40,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -110,7 +133,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 12),
                       child: Text(
                         'Macs accounting',
                         style: TextStyle(
@@ -122,126 +145,211 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                     ),
                   ],
                 ),
-                flex: 1,
               ),
-              Container(
-                constraints: BoxConstraints(maxWidth: 400),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      blurRadius: 4,
-                      spreadRadius: 2,
-                      color: Colors.black.withOpacity(0.3),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 1200),
+                layoutBuilder: (widget, list) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [widget!, ...list],
+                      alignment: Alignment.center,
                     ),
                   ],
                 ),
-                margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20, 30, 20, 5),
-                        width: _length.value,
-                        constraints: BoxConstraints(
-                          maxWidth: 340,
-                        ),
-                        child: TextFormField(
-                          focusNode: _emailFocusNode,
-                          decoration: loginInputDecoration('Имэйл хаяг',
-                              Icons.account_circle, _emailFocusNode),
-                          validator: validateEmail,
-                          controller: _emailController,
-                          style: loginInputTextStyle,
-                          onTap: requestEmailFocus,
-                          cursorColor: colorsLogin.focus,
-                          cursorHeight: 20,
-                          cursorRadius: Radius.circular(10),
-                          autofocus: false,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
-                        constraints: BoxConstraints(
-                          maxWidth: 340,
-                        ),
-                        child: TextFormField(
-                          focusNode: _passwordFocusNode,
-                          decoration: loginInputDecoration(
-                            'Нууц үг',
-                            Icons.lock,
-                            _passwordFocusNode,
-                            obscureText: _obscureText,
-                            togglePasswordHide: togglePasswordHide,
-                          ),
-                          validator: validatePassword,
-                          controller: _passwordController,
-                          obscureText: _obscureText,
-                          style: loginInputTextStyle,
-                          onTap: requestPasswordFocus,
-                          cursorColor: colorsLogin.focus,
-                          cursorHeight: 20,
-                          cursorRadius: Radius.circular(10),
-                          autofocus: false,
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
+                transitionBuilder:
+                    (Widget widget, Animation<double> animation) {
+                  final rotateAnim =
+                      Tween(begin: pi, end: 0.0).animate(animation);
+                  return AnimatedBuilder(
+                    animation: rotateAnim,
+                    child: widget,
+                    builder: (context, widget) {
+                      final isUnder = (ValueKey(_showLogin) != widget!.key);
+                      var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
+                      tilt *= isUnder ? -1.0 : 1.0;
+                      final value = min(rotateAnim.value, pi / 2);
+                      return Transform(
+                        transform: Matrix4.rotationY(value)
+                          ..setEntry(3, 0, tilt),
+                        child: widget,
                         alignment: Alignment.center,
-                        margin: EdgeInsets.fromLTRB(20, 20, 20, 30),
-                        child: ElevatedButton(
-                          autofocus: false,
-                          clipBehavior: Clip.none,
-                          child: Text('НЭВТРЭХ'),
-                          onPressed: handleLoginPress,
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            primary: colorsLogin.focus,
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            elevation: 4,
-                            shadowColor: Colors.black,
+                      );
+                    },
+                  );
+                },
+                switchInCurve: Curves.easeInOutCubic,
+                switchOutCurve: Curves.easeInOutCubic.flipped,
+                child: _showLogin
+                    ? loginContainer(
+                        ValueKey(true),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 1200),
+                                curve: Curves.easeInOutCubic,
+                                margin: EdgeInsets.fromLTRB(20, 30, 20, 5),
+                                width: _emailWidth,
+                                constraints: BoxConstraints(
+                                  maxWidth: 340,
+                                ),
+                                child: TextFormField(
+                                  focusNode: _emailFocusNode,
+                                  decoration: loginInputDecoration('Имэйл хаяг',
+                                      Icons.account_circle, _emailFocusNode),
+                                  validator: validateEmail,
+                                  controller: _emailController,
+                                  style: loginInputTextStyle,
+                                  onTap: requestEmailFocus,
+                                  cursorColor: colorsLogin.focus,
+                                  cursorHeight: 20,
+                                  cursorRadius: Radius.circular(10),
+                                  autofocus: false,
+                                ),
+                              ),
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 1200),
+                                curve: Curves.easeInOutCubic,
+                                margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                                width: _passwordWidth,
+                                constraints: BoxConstraints(
+                                  maxWidth: 340,
+                                ),
+                                child: TextFormField(
+                                  focusNode: _passwordFocusNode,
+                                  decoration: loginInputDecoration(
+                                    'Нууц үг',
+                                    Icons.lock,
+                                    _passwordFocusNode,
+                                    obscureText: _obscureText,
+                                    togglePasswordHide: togglePasswordHide,
+                                  ),
+                                  validator: validatePassword,
+                                  controller: _passwordController,
+                                  obscureText: _obscureText,
+                                  style: loginInputTextStyle,
+                                  onTap: requestPasswordFocus,
+                                  cursorColor: colorsLogin.focus,
+                                  cursorHeight: 20,
+                                  cursorRadius: Radius.circular(10),
+                                  autofocus: false,
+                                ),
+                              ),
+                              if (_errorMessage != '')
+                                Text(
+                                  _errorMessage,
+                                  style: TextStyle(
+                                    color: colorsLogin.error,
+                                  ),
+                                ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(20, 24, 20, 5),
+                                child: ScaleTransition(
+                                  scale: _animation,
+                                  child: ElevatedButton(
+                                    autofocus: false,
+                                    clipBehavior: Clip.none,
+                                    child: Text('НЭВТРЭХ'),
+                                    onPressed: handleLoginPress,
+                                    style: elevatedButtonStyle,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(20, 14, 20, 20),
+                                child: ScaleTransition(
+                                  scale: _animation,
+                                  child: ElevatedButton(
+                                    autofocus: false,
+                                    clipBehavior: Clip.none,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text('Тохиргоо '),
+                                        Icon(
+                                          Icons.settings,
+                                          size: 18,
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: handleSwitchSettings,
+                                    style: ElevatedButton.styleFrom(
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 14, 18, 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      primary: colorsLogin.focus,
+                                      textStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                        height: 0.96,
+                                      ),
+                                      elevation: 4,
+                                      shadowColor: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                      )
+                    : loginContainer(
+                        ValueKey(false),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(24, 30, 20, 5),
+                              child: Text('Серверийн тохиргоо:'),
+                              alignment: Alignment.centerLeft,
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(16, 14, 16, 5),
+                              child: TextFormField(
+                                decoration: urlInputDecoration,
+                                controller: _urlController,
+                                style: loginInputTextStyle,
+                                cursorColor: colorsLogin.focus,
+                                cursorHeight: 20,
+                                cursorRadius: Radius.circular(10),
+                                autofocus: false,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(20, 16, 20, 20),
+                              child: ElevatedButton(
+                                autofocus: false,
+                                clipBehavior: Clip.none,
+                                child: Text('Хадгалах'),
+                                onPressed: handleSwitchSettings,
+                                style: elevatedButtonStyle,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      if (_errorMessage != '')
-                        Text(
-                          _errorMessage,
-                          style: TextStyle(
-                            color: colorsLogin.error,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
               ),
-              Expanded(
+              Positioned(
+                bottom: 10,
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   child: Text(
                     'Copyright © 2021 Infosystems LLC',
                     style: TextStyle(
                       color: Colors.white,
-                      height: 4,
                     ),
                   ),
                 ),
-                flex: 1,
               ),
             ],
           ),
@@ -252,25 +360,25 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _controller.dispose();
-    super.dispose();
   }
 }
 
 String? validateEmail(value) {
   if (value.isEmpty) {
-    return 'Имайл хаяг оруулна уу.';
+    return 'Имайл хаяг оруулна уу';
   } else
     return null;
 }
 
 String? validatePassword(value) {
   if (value.isEmpty) {
-    return 'Нууц үгээ оруулна уу.';
+    return 'Нууц үгээ оруулна уу';
   } else
     return null;
 }
@@ -295,6 +403,31 @@ class ResError {
   factory ResError.fromJson(dynamic json) {
     return ResError(json['success'] as bool, Error.fromJson(json['error']));
   }
+}
+
+Container loginContainer(key, child) {
+  return Container(
+    key: key,
+    constraints: BoxConstraints(
+      maxWidth: 400,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          offset: Offset(0, 4),
+          blurRadius: 4,
+          spreadRadius: 2,
+          color: Colors.black.withOpacity(0.3),
+        ),
+      ],
+    ),
+    margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+    child: child,
+  );
 }
 
 InputDecoration loginInputDecoration(label, icon, focusNode,
@@ -326,7 +459,7 @@ InputDecoration loginInputDecoration(label, icon, focusNode,
     prefixIcon: Icon(
       icon,
       color: focusNode.hasFocus ? colorsLogin.focus : colorsLogin.label,
-      size: 24,
+      size: 22,
     ),
     labelStyle: TextStyle(
       color: focusNode.hasFocus ? colorsLogin.focus : colorsLogin.label,
@@ -346,7 +479,7 @@ InputDecoration loginInputDecoration(label, icon, focusNode,
             child: Icon(
               obscureText ? Icons.visibility_off : Icons.visibility,
               color: focusNode.hasFocus ? colorsLogin.focus : colorsLogin.label,
-              size: 24,
+              size: 22,
             ),
             onTap: () {
               togglePasswordHide();
@@ -355,13 +488,52 @@ InputDecoration loginInputDecoration(label, icon, focusNode,
   );
 }
 
+InputDecoration urlInputDecoration = InputDecoration(
+  labelText: 'Server API base url',
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(100)),
+    borderSide: BorderSide.none,
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(100)),
+    borderSide: BorderSide(
+      color: colorsLogin.focus,
+    ),
+  ),
+  filled: true,
+  fillColor: colorsLogin.fill,
+  hoverColor: colorsLogin.fill,
+  focusColor: colorsLogin.focus,
+  isDense: true,
+  contentPadding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+);
+
 TextStyle loginInputTextStyle = TextStyle(
   fontSize: 14,
   color: Colors.black87,
 );
 
+ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
+  padding: EdgeInsets.symmetric(
+    horizontal: 30,
+    vertical: 16,
+  ),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(100),
+  ),
+  primary: colorsLogin.focus,
+  textStyle: TextStyle(
+    color: Colors.white,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  ),
+  elevation: 4,
+  shadowColor: Colors.black,
+);
+
 class ColorsLogin {
-  var focus = Colors.blue.shade800;
+  var background = Colors.blue.shade900;
+  var focus = Colors.blue.shade900;
   var error = Colors.red;
   var label = Colors.grey.shade600;
   var fill = Colors.grey.shade200;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/login.dart';
 import 'package:flutter_application_1/routes/router.dart';
 
 class StartUp extends StatefulWidget {
@@ -17,7 +18,7 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(seconds: 2));
 
     final CurvedAnimation curve =
-        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic);
 
     _fade = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
 
@@ -34,11 +35,7 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.red.shade900, Colors.blue.shade900],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
+          color: colorsLogin.background,
         ),
         alignment: Alignment.center,
         child: FadeTransition(
