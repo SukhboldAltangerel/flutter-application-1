@@ -35,7 +35,15 @@ class _StartUpState extends State<StartUp> with SingleTickerProviderStateMixin {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-          color: colorsLogin.background,
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue.shade900,
+              colorsLogin.background,
+              Colors.blue.shade900,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
         alignment: Alignment.center,
         child: FadeTransition(

@@ -115,6 +115,17 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.blue.shade900,
+                colorsLogin.background,
+                Colors.blue.shade900,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -133,7 +144,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 12),
+                      margin: EdgeInsets.only(top: 16),
                       child: Text(
                         'Macs accounting',
                         style: TextStyle(
@@ -147,7 +158,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 ),
               ),
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 1200),
+                duration: const Duration(milliseconds: 900),
                 layoutBuilder: (widget, list) => Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,7 +203,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               AnimatedContainer(
                                 duration: Duration(milliseconds: 1200),
                                 curve: Curves.easeInOutCubic,
-                                margin: EdgeInsets.fromLTRB(20, 30, 20, 5),
+                                margin: EdgeInsets.fromLTRB(20, 16, 20, 5),
                                 width: _emailWidth,
                                 constraints: BoxConstraints(
                                   maxWidth: 340,
@@ -214,7 +225,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               AnimatedContainer(
                                 duration: Duration(milliseconds: 1200),
                                 curve: Curves.easeInOutCubic,
-                                margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                                margin: EdgeInsets.fromLTRB(20, 10, 20, 5),
                                 width: _passwordWidth,
                                 constraints: BoxConstraints(
                                   maxWidth: 340,
@@ -247,7 +258,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                   ),
                                 ),
                               Container(
-                                margin: EdgeInsets.fromLTRB(20, 24, 20, 5),
+                                margin: EdgeInsets.fromLTRB(20, 10, 20, 5),
                                 child: ScaleTransition(
                                   scale: _animation,
                                   child: ElevatedButton(
@@ -260,7 +271,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.fromLTRB(20, 14, 20, 20),
+                                margin: EdgeInsets.fromLTRB(20, 8, 20, 14),
                                 child: ScaleTransition(
                                   scale: _animation,
                                   child: ElevatedButton(
@@ -309,12 +320,12 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              margin: EdgeInsets.fromLTRB(24, 30, 20, 5),
+                              margin: EdgeInsets.fromLTRB(24, 16, 20, 5),
                               child: Text('Серверийн тохиргоо:'),
                               alignment: Alignment.centerLeft,
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(16, 14, 16, 5),
+                              margin: EdgeInsets.fromLTRB(16, 8, 16, 5),
                               child: TextFormField(
                                 decoration: urlInputDecoration,
                                 controller: _urlController,
@@ -326,7 +337,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(20, 16, 20, 20),
+                              margin: EdgeInsets.fromLTRB(20, 8, 20, 14),
                               child: ElevatedButton(
                                 autofocus: false,
                                 clipBehavior: Clip.none,
@@ -515,8 +526,8 @@ TextStyle loginInputTextStyle = TextStyle(
 
 ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
   padding: EdgeInsets.symmetric(
-    horizontal: 30,
-    vertical: 16,
+    horizontal: 26,
+    vertical: 14,
   ),
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(100),
@@ -532,7 +543,8 @@ ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
 );
 
 class ColorsLogin {
-  var background = Colors.blue.shade900;
+  var background = Color.fromRGBO(5, 16, 58, 1);
+  var red = Color(0xff7F1D1D);
   var focus = Colors.blue.shade900;
   var error = Colors.red;
   var label = Colors.grey.shade600;
