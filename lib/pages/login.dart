@@ -7,6 +7,8 @@ import 'package:flutter_application_1/utils/baseUrl.dart';
 import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -49,7 +51,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       });
     });
 
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 600), () {
       setState(() {
         _passwordWidth = 340.0;
       });
@@ -118,9 +120,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.blue.shade900,
-                colorsLogin.background,
-                Colors.blue.shade900,
+                colorsLogin.redDark,
+                colorsLogin.redDarker,
+                colorsLogin.redDark,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -264,7 +266,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                                   child: ElevatedButton(
                                     autofocus: false,
                                     clipBehavior: Clip.none,
-                                    child: Text('НЭВТРЭХ'),
+                                    child: Text('Нэвтрэх'),
                                     onPressed: handleLoginPress,
                                     style: elevatedButtonStyle,
                                   ),
@@ -544,7 +546,9 @@ ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
 
 class ColorsLogin {
   var background = Color.fromRGBO(5, 16, 58, 1);
-  var red = Color(0xff7F1D1D);
+  var redDarker = Color(0xff4f1212);
+  var redDark = Color(0xff7F1D1D);
+  var red = Color(0xffB91C1C);
   var focus = Colors.blue.shade900;
   var error = Colors.red;
   var label = Colors.grey.shade600;

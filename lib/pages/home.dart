@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/routes/homeRouter.dart';
-import 'package:flutter_application_1/routes/router.dart';
 
 class Home extends StatelessWidget {
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  const Home({Key? key}) : super(key: key);
+
+  // static GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My app'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          backgroundColor: Colors.blue.withOpacity(0),
+          elevation: 0,
+        ),
       ),
       endDrawer: HomeDrawer(),
       body: Navigator(
-        key: _navigatorKey,
+        // key: _homeNavKey,
         onGenerateRoute: HomeRouter.generateRoute,
         initialRoute: home1Route,
-        observers: [],
       ),
     );
   }
 }
 
 class HomeDrawer extends StatelessWidget {
+  const HomeDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/home/menu.dart';
 import 'package:flutter_application_1/utils/functions.dart';
 
 const home1Route = '/home/home1';
@@ -13,10 +14,7 @@ class HomeRouter {
 
     switch (pathName) {
       case '/home1':
-        page = Container(
-          alignment: Alignment.center,
-          child: Text('home 1'),
-        );
+        page = Menu();
         break;
       case '/home2':
         page = Container(
@@ -41,6 +39,7 @@ class HomeRouter {
     return MaterialPageRoute<dynamic>(
       builder: (_) => page,
       settings: settings,
+      maintainState: true,
     );
   }
 }

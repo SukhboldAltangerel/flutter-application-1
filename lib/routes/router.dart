@@ -32,6 +32,7 @@ class AppRouter {
     return MaterialPageRoute(
       builder: (_) => page,
       settings: settings,
+      maintainState: true,
     );
   }
 }
