@@ -120,9 +120,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                colorsLogin.redDark,
-                colorsLogin.redDarker,
-                colorsLogin.redDark,
+                colorsLogin.background,
+                colorsLogin.background,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
