@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home/menu.dart';
+import 'package:flutter_application_1/pages/home/menu1.dart';
 import 'package:flutter_application_1/utils/functions.dart';
 
 const home1Route = '/home/home1';
@@ -14,7 +15,7 @@ class HomeRouter {
 
     switch (pathName) {
       case '/home1':
-        page = Menu();
+        page = Menu1();
         break;
       case '/home2':
         page = Container(

@@ -5,6 +5,7 @@ import 'package:flutter_application_1/routes/homeRouter.dart';
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
   // static GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
+  // static GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +42,19 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             title: Text('Item 1'),
             onTap: () {
-              Navigator.pushNamed(context, home1Route);
+              Navigator.of(context).pushNamed(home1Route);
             },
           ),
           ListTile(
             title: Text('Item 2'),
             onTap: () {
-              Navigator.pushNamed(context, home2Route);
+              Navigator.of(context).pushNamed(home2Route);
             },
           ),
           ListTile(
             title: Text('Item 3'),
             onTap: () {
-              Navigator.pushNamed(context, home3Route);
+              Navigator.of(context).pushNamed(home3Route);
             },
           ),
         ],
