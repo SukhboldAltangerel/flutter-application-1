@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/login.dart';
-import 'package:flutter_application_1/pages/start_up.dart';
+import 'package:flutter_application_1/pages/startUp.dart';
 import 'package:flutter_application_1/utils/functions.dart';
 
 const startUpRoute = '/start-up';

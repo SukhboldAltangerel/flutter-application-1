@@ -166,7 +166,7 @@ class _MenuCardState extends State<MenuCard>
               ],
             ),
           ),
-          AnimatedBuilder(animation: animation, builder: builder),
+          // AnimatedBuilder(animation: animation, builder: builder),
         ],
       ),
     );
